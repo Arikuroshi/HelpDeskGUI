@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 
 const HelpCenter = () => {
   return (
@@ -42,6 +43,15 @@ const HelpCenter = () => {
           <p className="text-zinc-600 dark:text-zinc-400">
             Frequently asked questions about our services and support.
           </p>
+        </a>
+        <a>
+          <Link
+            href="/help-center/priority"
+            className="block p-4 border rounded-lg ..."
+          >
+            <h3 className="text-lg font-semibold">Article: Priority</h3>
+            <p className="text-zinc-600">Define Priority for tickets.</p>
+          </Link>
         </a>
       </div>
     </div>

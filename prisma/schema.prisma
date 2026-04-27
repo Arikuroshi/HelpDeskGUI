@@ -4,13 +4,11 @@
 // Get a free hosted Postgres database in seconds: `npx create-db`
 
 generator client {
-  provider = "prisma-client"
-  output   = "../app/generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -23,24 +21,39 @@ model User {
 
   tickets  Ticket[]
   comments Comment[]
+
+  assignedTickets Ticket[] @relation("AssignedTickets")
 }
 
 model Ticket {
-  id          String       @id @default(cuid())
+  id          String @id @default(cuid())
   title       String
   description String
-  status      TicketStatus @default(OPEN)
-  priority    Priority     @default(LOW)
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+
+  priority Priority
+  impact   Impact   @default(LOW)
+  urgency  Urgency  @default(LOW)
+
+  status TicketStatus @default(OPEN)
+
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  dueDate    DateTime?
+  resolvedAt DateTime?
 
   userId String
   user   User   @relation(fields: [userId], references: [id])
+
+  assignedToId String?
+  assignedTo   User?   @relation("AssignedTickets", fields: [assignedToId], references: [id])
 
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id])
 
   comments Comment[]
+
+  @@index([organizationId])
+  @@index([assignedToId])
 }
 
 model Organization {
@@ -70,6 +83,19 @@ enum TicketStatus {
 }
 
 enum Priority {
+  P1
+  P2
+  P3
+  P4
+}
+
+enum Impact {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum Urgency {
   LOW
   MEDIUM
   HIGH

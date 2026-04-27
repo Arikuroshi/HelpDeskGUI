@@ -22,3 +22,10 @@ export interface HelpArticle {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export type Activity = {
+  id: string;
+  message: string;
+  createdAt: string;
+  authorId?: string;
+};

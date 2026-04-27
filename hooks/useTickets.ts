@@ -1,6 +1,15 @@
 import { useEffect, useState } from "react";
 import { Ticket } from "../types";
 
+function getErrorMessage(err: unknown): string {
+  if (err instanceof Error) return err.message;
+  try {
+    return JSON.stringify(err);
+  } catch {
+    return String(err);
+  }
+}
+
 const useTickets = () => {
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -16,7 +25,7 @@ const useTickets = () => {
         const data: Ticket[] = await response.json();
         setTickets(data);
       } catch (err) {
-        setError(err.message);
+        setError(getErrorMessage(err));
       } finally {
         setLoading(false);
       }
@@ -47,7 +56,7 @@ const useTickets = () => {
         ),
       );
     } catch (err) {
-      setError(err.message);
+      setError(getErrorMessage(err));
     }
   };
 

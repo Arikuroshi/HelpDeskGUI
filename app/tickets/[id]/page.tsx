@@ -1,40 +1,34 @@
-import React from "react";
+import TicketCard from "../../components/TicketCard";
 
-interface TicketCardProps {
+interface Ticket {
+  id: number;
   title: string;
-  status: "open" | "in-progress" | "closed";
-  priority: "low" | "medium" | "high";
-  onClick: () => void;
+  status: "Open" | "In-Progress" | "Closed";
+  priority: "Low" | "Medium" | "High";
 }
 
-const TicketCard: React.FC<TicketCardProps> = ({
-  title,
-  status,
-  priority,
-  onClick,
-}) => {
-  const statusColors = {
-    open: "bg-green-100 text-green-800",
-    "in-progress": "bg-yellow-100 text-yellow-800",
-    closed: "bg-red-100 text-red-800",
-  };
+interface Props {
+  params: { id: string };
+}
 
-  const priorityColors = {
-    low: "border-green-500",
-    medium: "border-yellow-500",
-    high: "border-red-500",
+const TicketPage = ({ params }: Props) => {
+  //TODO: Implement data fetching
+  const ticket: Ticket = {
+    id: Number(params.id),
+    title: "Example ticket",
+    status: "Open",
+    priority: "High",
   };
 
   return (
-    <div
-      className={`flex flex-col p-4 border rounded-lg shadow-md cursor-pointer ${statusColors[status]} ${priorityColors[priority]}`}
-      onClick={onClick}
-    >
-      <h3 className="text-lg font-semibold">{title}</h3>
-      <p className="mt-2">Status: {status}</p>
-      <p className="mt-1">Priority: {priority}</p>
+    <div className="p-4">
+      <TicketCard
+        title={ticket.title}
+        status={ticket.status}
+        priority={ticket.priority}
+      />
     </div>
   );
 };
 
-export default TicketCard;
+export default TicketPage;
