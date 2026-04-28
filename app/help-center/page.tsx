@@ -1,61 +1,51 @@
-import React from "react";
 import Link from "next/link";
+import { Card } from "../components/ui/Card";
 
-const HelpCenter = () => {
+const articles = [
+  {
+    href: "/help-center/getting-started",
+    title: "Getting started",
+    summary: "Set up your account and submit your first support ticket.",
+  },
+  {
+    href: "/help-center/managing-tickets",
+    title: "Managing tickets",
+    summary: "How to view, update, and track the progress of your tickets.",
+  },
+  {
+    href: "/help-center/sla-and-priority",
+    title: "Priority & SLA definitions",
+    summary: "Understand P1–P4 priorities and response / resolution targets.",
+  },
+  {
+    href: "/help-center/faq",
+    title: "FAQs",
+    summary: "Frequently asked questions about the helpdesk system.",
+  },
+];
+
+export default function HelpCentrePage() {
   return (
-    <div className="flex flex-col items-center justify-center p-6 bg-white dark:bg-black">
-      <h2 className="text-2xl font-bold text-black dark:text-zinc-50">
-        Help Center
-      </h2>
-      <p className="mt-4 text-lg text-zinc-600 dark:text-zinc-400">
-        Find answers to your questions and access our help articles below.
+    <div className="mx-auto max-w-3xl px-4 py-8">
+      <p className="font-mono text-xs text-[var(--ink-faint)] uppercase tracking-widest mb-2">
+        Help centre
       </p>
-      <div className="mt-6 space-y-4">
-        <a
-          href="/help/article1"
-          className="block p-4 border rounded-lg shadow hover:bg-gray-100 dark:hover:bg-zinc-700"
-        >
-          <h3 className="text-lg font-semibold text-black dark:text-zinc-50">
-            Article 1: Getting Started
-          </h3>
-          <p className="text-zinc-600 dark:text-zinc-400">
-            Learn how to set up your account and get started with our services.
-          </p>
-        </a>
-        <a
-          href="/help/article2"
-          className="block p-4 border rounded-lg shadow hover:bg-gray-100 dark:hover:bg-zinc-700"
-        >
-          <h3 className="text-lg font-semibold text-black dark:text-zinc-50">
-            Article 2: Managing Tickets
-          </h3>
-          <p className="text-zinc-600 dark:text-zinc-400">
-            A guide on how to create, view, and manage your support tickets.
-          </p>
-        </a>
-        <a
-          href="/help/article3"
-          className="block p-4 border rounded-lg shadow hover:bg-gray-100 dark:hover:bg-zinc-700"
-        >
-          <h3 className="text-lg font-semibold text-black dark:text-zinc-50">
-            Article 3: FAQs
-          </h3>
-          <p className="text-zinc-600 dark:text-zinc-400">
-            Frequently asked questions about our services and support.
-          </p>
-        </a>
-        <a>
-          <Link
-            href="/help-center/priority"
-            className="block p-4 border rounded-lg ..."
-          >
-            <h3 className="text-lg font-semibold">Article: Priority</h3>
-            <p className="text-zinc-600">Define Priority for tickets.</p>
+      <h1 className="text-2xl font-semibold tracking-tight mb-8">
+        How can we help?
+      </h1>
+
+      <div className="space-y-3">
+        {articles.map((a) => (
+          <Link key={a.href} href={a.href}>
+            <Card className="p-5 hover:bg-[var(--surface-3)] transition-colors cursor-pointer">
+              <h2 className="text-sm font-medium text-[var(--ink)] mb-1">
+                {a.title}
+              </h2>
+              <p className="text-sm text-[var(--ink-muted)]">{a.summary}</p>
+            </Card>
           </Link>
-        </a>
+        ))}
       </div>
     </div>
   );
-};
-
-export default HelpCenter;
+}

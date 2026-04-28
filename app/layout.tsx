@@ -1,18 +1,19 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { DM_Sans, DM_Mono } from "next/font/google";
 import "./globals.css";
+import { AppProvider } from "./context/AppContext";
+import Header from "./components/layout/Header";
 
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const dmSans = DM_Sans({
+  variable: "--font-sans",
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const dmMono = DM_Mono({
+  variable: "--font-mono",
   subsets: ["latin"],
+  weight: ["400", "500"],
 });
 
 export const metadata: Metadata = {
@@ -26,16 +27,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col">
-        <Header />
-
-        <main className="flex-1">{children}</main>
-
-        <Footer />
+    <html lang="en" className={`${dmSans.variable} ${dmMono.variable}`}>
+      <body className="min-h-screen flex flex-col bg-surface text-ink antialiased">
+        <AppProvider>
+          <Header />
+          <main className="flex-1">{children}</main>
+          <footer className="border-t border-ink/10 py-4 text-center text-xs text-ink/40 font-mono">
+            © {new Date().getFullYear()} Kantan Help
+          </footer>
+        </AppProvider>
       </body>
     </html>
   );

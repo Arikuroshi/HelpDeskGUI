@@ -1,28 +1,31 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client-js"
+  output   = "../app/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
 }
 
+model Organization {
+  id      String   @id @default(cuid())
+  name    String
+  users   User[]
+  tickets Ticket[]
+}
+
 model User {
   id    String  @id @default(cuid())
   email String  @unique
   name  String?
+  role  Role    @default(USER)
 
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id])
 
-  tickets  Ticket[]
-  comments Comment[]
-
-  assignedTickets Ticket[] @relation("AssignedTickets")
+  tickets         Ticket[]  @relation("CreatedTickets")
+  assignedTickets Ticket[]  @relation("AssignedTickets")
+  comments        Comment[]
 }
 
 model Ticket {
@@ -33,8 +36,7 @@ model Ticket {
   priority Priority
   impact   Impact   @default(LOW)
   urgency  Urgency  @default(LOW)
-
-  status TicketStatus @default(OPEN)
+  status   Status   @default(OPEN)
 
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
@@ -42,7 +44,7 @@ model Ticket {
   resolvedAt DateTime?
 
   userId String
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation("CreatedTickets", fields: [userId], references: [id])
 
   assignedToId String?
   assignedTo   User?   @relation("AssignedTickets", fields: [assignedToId], references: [id])
@@ -54,13 +56,7 @@ model Ticket {
 
   @@index([organizationId])
   @@index([assignedToId])
-}
-
-model Organization {
-  id      String   @id @default(cuid())
-  name    String
-  users   User[]
-  tickets Ticket[]
+  @@index([status])
 }
 
 model Comment {
@@ -76,7 +72,13 @@ model Comment {
   user   User   @relation(fields: [userId], references: [id])
 }
 
-enum TicketStatus {
+enum Role {
+  USER
+  SUPPORTER
+  ADMIN
+}
+
+enum Status {
   OPEN
   IN_PROGRESS
   CLOSED

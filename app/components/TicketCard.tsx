@@ -1,40 +1,59 @@
-import React from "react";
+import Link from "next/link";
+import Badge from "./ui/badge";
+import {
+  priorityBadgeClass,
+  statusBadgeClass,
+  PRIORITY_LABEL,
+  STATUS_LABEL,
+} from "../lib/ticketHelpers";
+import type { Priority, Status } from "../../types";
 
 interface TicketCardProps {
+  id: string;
   title: string;
-  status: "open" | "in-progress" | "closed";
-  priority: "low" | "medium" | "high";
-  onClick?: () => void; // optional now
+  status: Status;
+  priority: Priority;
+  createdAt: Date;
+  assignedTo?: { name: string | null } | null;
 }
 
-const TicketCard: React.FC<TicketCardProps> = ({
+export default function TicketCard({
+  id,
   title,
   status,
   priority,
-  onClick,
-}) => {
-  const statusColors = {
-    open: "bg-green-100 text-green-800",
-    "in-progress": "bg-yellow-100 text-yellow-800",
-    closed: "bg-red-100 text-red-800",
-  };
-
-  const priorityColors = {
-    low: "border-green-500",
-    medium: "border-yellow-500",
-    high: "border-red-500",
-  };
-
+  createdAt,
+  assignedTo,
+}: TicketCardProps) {
   return (
-    <div
-      className={`flex flex-col p-4 border rounded-lg shadow-md cursor-pointer ${statusColors[status]} ${priorityColors[priority]}`}
-      onClick={onClick}
+    <Link
+      href={`/tickets/${id}`}
+      className="block rounded-2xl border border-border bg-surface-2 p-4 hover:bg-surface-3 transition-colors group"
     >
-      <h3 className="text-lg font-semibold">{title}</h3>
-      <p className="mt-2">Status: {status}</p>
-      <p className="mt-1">Priority: {priority}</p>
-    </div>
-  );
-};
+      <div className="flex items-start justify-between gap-3 mb-3">
+        <h3 className="text-sm font-medium text-ink leading-snug group-hover:underline decoration-ink-faint">
+          {title}
+        </h3>
+        <Badge className={priorityBadgeClass(priority)}>{priority}</Badge>
+      </div>
 
-export default TicketCard;
+      <div className="flex items-center gap-2 flex-wrap">
+        <Badge className={statusBadgeClass(status)}>
+          {STATUS_LABEL[status]}
+        </Badge>
+        {assignedTo && (
+          <span className="text-xs text-ink-faint">
+            → {assignedTo.name ?? "Unknown"}
+          </span>
+        )}
+        <span className="ml-auto text-xs font-mono text-ink-faint">
+          {new Date(createdAt).toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+          })}
+        </span>
+      </div>
+    </Link>
+  );
+}

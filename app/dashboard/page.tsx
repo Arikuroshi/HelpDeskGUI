@@ -1,34 +1,49 @@
-import DashboardLayout from "@/components/layout/DashboardLayout";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "../lib/prisma";
+import DashboardLayout from "../components/layout/DashboardLayout";
+
+// TODO: replace DEV_USER_ID with real auth (e.g. NextAuth session)
+const DEV_USER_ID = process.env.DEV_USER_ID ?? "";
 
 export default async function DashboardPage() {
   const [
-    openTickets,
-    overdueTickets,
-    unassignedTickets,
+    openCount,
+    inProgressCount,
+    unassignedCount,
     myTickets,
-    recentActivity,
+    recentTickets,
   ] = await Promise.all([
     prisma.ticket.count({ where: { status: "OPEN" } }),
-    prisma.ticket.findMany({
-      where: { resolvedAt: { not: null, lt: new Date() } },
+
+    prisma.ticket.count({ where: { status: "IN_PROGRESS" } }),
+
+    prisma.ticket.count({
+      where: { assignedToId: null, status: { not: "CLOSED" } },
     }),
-    prisma.ticket.count({ where: { assignedToId: null } }),
+
+    DEV_USER_ID
+      ? prisma.ticket.findMany({
+          where: { assignedToId: DEV_USER_ID, status: { not: "CLOSED" } },
+          orderBy: { updatedAt: "desc" },
+          take: 5,
+          include: { user: true, assignedTo: true },
+        })
+      : [],
+
     prisma.ticket.findMany({
-      where: { assignedToId: session.currentUser.id },
-      take: 5,
+      orderBy: { createdAt: "desc" },
+      take: 8,
+      include: { user: true, assignedTo: true },
     }),
-    prisma.activity.findMany({ take: 10, orderBy: { createdAt: "desc" } }),
   ]);
 
   return (
     <DashboardLayout
       data={{
-        openTickets,
-        overdueTickets,
-        unassignedTickets,
+        openCount,
+        inProgressCount,
+        unassignedCount,
         myTickets,
-        recentActivity,
+        recentTickets,
       }}
     />
   );

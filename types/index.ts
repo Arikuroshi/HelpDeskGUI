@@ -1,31 +1,54 @@
-export interface Ticket {
+// Single source of truth: re-export Prisma types so the rest of the app
+// never has to import directly from @prisma/client.
+export type {
+  User,
+  Ticket,
+  Comment,
+  Organization,
+  Role,
+  Status,
+  Priority,
+  Impact,
+  Urgency,
+} from "../app/generated/prisma";
+
+// ── UI-only types ──────────────────────────────────────────────────────────────
+
+export type AppRole = "user" | "supporter";
+
+export type TicketWithRelations = {
   id: string;
   title: string;
   description: string;
-  status: "open" | "in-progress" | "closed";
-  priority: "low" | "medium" | "high";
+  status: import("../app/generated/prisma").Status;
+  priority: import("../app/generated/prisma").Priority;
+  impact: import("../app/generated/prisma").Impact;
+  urgency: import("../app/generated/prisma").Urgency;
   createdAt: Date;
   updatedAt: Date;
-}
+  dueDate: Date | null;
+  resolvedAt: Date | null;
+  userId: string;
+  user: { id: string; name: string | null; email: string };
+  assignedToId: string | null;
+  assignedTo: { id: string; name: string | null; email: string } | null;
+  organizationId: string;
+  comments: CommentWithAuthor[];
+};
 
-export interface User {
+export type CommentWithAuthor = {
   id: string;
-  name: string;
-  email: string;
-  role: "admin" | "user";
-}
-
-export interface HelpArticle {
-  id: string;
-  title: string;
   content: string;
   createdAt: Date;
   updatedAt: Date;
-}
-
-export type Activity = {
-  id: string;
-  message: string;
-  createdAt: string;
-  authorId?: string;
+  userId: string;
+  user: { id: string; name: string | null; email: string };
 };
+
+export {
+  Role,
+  Status,
+  Priority,
+  Impact,
+  Urgency,
+} from "../app/generated/prisma";
