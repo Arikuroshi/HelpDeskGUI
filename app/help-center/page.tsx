@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Card } from "../components/ui/Card";
+import Card from "../components/ui/Card";
 
 const articles = [
   {
@@ -27,7 +27,7 @@ const articles = [
 export default function HelpCentrePage() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-8">
-      <p className="font-mono text-xs text-[var(--ink-faint)] uppercase tracking-widest mb-2">
+      <p className="font-mono text-xs text-ink-faint uppercase tracking-widest mb-2">
         Help centre
       </p>
       <h1 className="text-2xl font-semibold tracking-tight mb-8">
@@ -37,11 +37,9 @@ export default function HelpCentrePage() {
       <div className="space-y-3">
         {articles.map((a) => (
           <Link key={a.href} href={a.href}>
-            <Card className="p-5 hover:bg-[var(--surface-3)] transition-colors cursor-pointer">
-              <h2 className="text-sm font-medium text-[var(--ink)] mb-1">
-                {a.title}
-              </h2>
-              <p className="text-sm text-[var(--ink-muted)]">{a.summary}</p>
+            <Card className="p-5 hover:bg-surface-3 transition-colors cursor-pointer">
+              <h2 className="text-sm font-medium text-ink mb-1">{a.title}</h2>
+              <p className="text-sm text-ink-muted">{a.summary}</p>
             </Card>
           </Link>
         ))}

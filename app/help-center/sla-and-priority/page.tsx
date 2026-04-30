@@ -21,14 +21,14 @@ export default function SLAPage() {
     <div className="mx-auto max-w-3xl px-4 py-8">
       <a
         href="/help-center"
-        className="text-xs font-mono text-[var(--ink-faint)] hover:text-[var(--ink)] transition-colors mb-6 inline-block"
+        className="text-xs font-mono text-ink-faint hover:text-ink transition-colors mb-6 inline-block"
       >
         ← Help centre
       </a>
       <h1 className="text-2xl font-semibold tracking-tight mb-2">
         Priority & SLA definitions
       </h1>
-      <p className="text-[var(--ink-muted)] text-sm mb-8">
+      <p className="text-ink-muted text-sm mb-8">
         Priority is derived automatically from Impact × Urgency and determines
         how quickly support must respond and resolve the ticket.
       </p>
@@ -46,21 +46,15 @@ export default function SLAPage() {
                   {PRIORITY_LABEL[p].split("—")[1].trim()}
                 </span>
               </div>
-              <p className="text-sm text-[var(--ink-muted)] mb-4">
-                {descriptions[p]}
-              </p>
+              <p className="text-sm text-ink-muted mb-4">{descriptions[p]}</p>
               <div className="flex gap-6 font-mono text-xs">
                 <div>
-                  <span className="text-[var(--ink-faint)]">Response </span>
-                  <span className="text-[var(--ink)] font-medium">
-                    {sla.response}
-                  </span>
+                  <span className="text-ink-faint">Response </span>
+                  <span className="text-ink font-medium">{sla.response}</span>
                 </div>
                 <div>
-                  <span className="text-[var(--ink-faint)]">Resolution </span>
-                  <span className="text-[var(--ink)] font-medium">
-                    {sla.resolution}
-                  </span>
+                  <span className="text-ink-faint">Resolution </span>
+                  <span className="text-ink font-medium">{sla.resolution}</span>
                 </div>
               </div>
             </Card>

@@ -44,11 +44,3 @@ export type CommentWithAuthor = {
   userId: string;
   user: { id: string; name: string | null; email: string };
 };
-
-export {
-  Role,
-  Status,
-  Priority,
-  Impact,
-  Urgency,
-} from "../app/generated/prisma";

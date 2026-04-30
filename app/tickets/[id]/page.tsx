@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import { prisma } from "../../lib/prisma";
 import Badge from "../../components/ui/Badge";
 import Card from "../../components/ui/Card";
@@ -12,12 +13,14 @@ import {
 import TicketActions from "../../components/TicketActions";
 
 interface Props {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export default async function TicketPage({ params }: Props) {
+  const { id } = await params;
+
   const ticket = await prisma.ticket.findUnique({
-    where: { id: params.id },
+    where: { id },
     include: {
       user: true,
       assignedTo: true,
@@ -31,15 +34,13 @@ export default async function TicketPage({ params }: Props) {
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-8">
-      {/* Back */}
-      <a
+      <Link
         href="/tickets"
-        className="text-xs font-mono text-[var(--ink-faint)] hover:text-[var(--ink)] transition-colors mb-6 inline-block"
+        className="text-xs font-mono text-ink-faint hover:text-ink transition-colors mb-6 inline-block"
       >
         ← All tickets
-      </a>
+      </Link>
 
-      {/* Title row */}
       <div className="flex items-start gap-3 mb-6">
         <div className="flex-1">
           <h1 className="text-2xl font-semibold tracking-tight leading-snug mb-2">
@@ -52,7 +53,7 @@ export default async function TicketPage({ params }: Props) {
             <Badge className={priorityBadgeClass(ticket.priority)}>
               {PRIORITY_LABEL[ticket.priority]}
             </Badge>
-            <span className="text-xs text-[var(--ink-faint)] font-mono">
+            <span className="text-xs text-ink-faint font-mono">
               #{ticket.id.slice(-6)}
             </span>
           </div>
@@ -60,26 +61,22 @@ export default async function TicketPage({ params }: Props) {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Description + comments */}
         <div className="md:col-span-2 space-y-6">
           <Card className="p-5">
-            <p className="text-xs font-mono text-[var(--ink-faint)] uppercase tracking-widest mb-3">
+            <p className="text-xs font-mono text-ink-faint uppercase tracking-widest mb-3">
               Description
             </p>
-            <p className="text-sm text-[var(--ink-muted)] leading-relaxed whitespace-pre-wrap">
+            <p className="text-sm text-ink-muted leading-relaxed whitespace-pre-wrap">
               {ticket.description}
             </p>
           </Card>
 
-          {/* Comments */}
           <div>
-            <p className="text-xs font-mono text-[var(--ink-faint)] uppercase tracking-widest mb-3">
+            <p className="text-xs font-mono text-ink-faint uppercase tracking-widest mb-3">
               Comments ({ticket.comments.length})
             </p>
             {ticket.comments.length === 0 ? (
-              <p className="text-sm text-[var(--ink-faint)]">
-                No comments yet.
-              </p>
+              <p className="text-sm text-ink-faint">No comments yet.</p>
             ) : (
               <div className="space-y-3">
                 {ticket.comments.map((c) => (
@@ -88,13 +85,11 @@ export default async function TicketPage({ params }: Props) {
                       <span className="text-xs font-medium">
                         {c.user.name ?? c.user.email}
                       </span>
-                      <span className="text-xs font-mono text-[var(--ink-faint)]">
+                      <span className="text-xs font-mono text-ink-faint">
                         {new Date(c.createdAt).toLocaleString("en-GB")}
                       </span>
                     </div>
-                    <p className="text-sm text-[var(--ink-muted)]">
-                      {c.content}
-                    </p>
+                    <p className="text-sm text-ink-muted">{c.content}</p>
                   </Card>
                 ))}
               </div>
@@ -102,7 +97,6 @@ export default async function TicketPage({ params }: Props) {
           </div>
         </div>
 
-        {/* Sidebar: meta + supporter actions */}
         <div className="space-y-4">
           <Card className="p-5 text-xs space-y-3">
             <Row
@@ -125,22 +119,19 @@ export default async function TicketPage({ params }: Props) {
           </Card>
 
           <Card className="p-5">
-            <p className="text-xs font-mono text-[var(--ink-faint)] uppercase tracking-widest mb-3">
+            <p className="text-xs font-mono text-ink-faint uppercase tracking-widest mb-3">
               SLA
             </p>
-            <div className="text-xs font-mono space-y-1 text-[var(--ink-muted)]">
+            <div className="text-xs font-mono space-y-1 text-ink-muted">
               <div>
-                Response{" "}
-                <span className="text-[var(--ink)]">{sla.response}</span>
+                Response <span className="text-ink">{sla.response}</span>
               </div>
               <div>
-                Resolve{" "}
-                <span className="text-[var(--ink)]">{sla.resolution}</span>
+                Resolve <span className="text-ink">{sla.resolution}</span>
               </div>
             </div>
           </Card>
 
-          {/* Supporter-only action panel (client component) */}
           <TicketActions ticketId={ticket.id} currentStatus={ticket.status} />
         </div>
       </div>
@@ -148,12 +139,11 @@ export default async function TicketPage({ params }: Props) {
   );
 }
 
-// ── Sub-component ──────────────────────────────────────────────────────────────
 function Row({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex justify-between gap-2">
-      <span className="text-[var(--ink-faint)]">{label}</span>
-      <span className="text-[var(--ink)] font-medium text-right">{value}</span>
+      <span className="text-ink-faint">{label}</span>
+      <span className="text-ink font-medium text-right">{value}</span>
     </div>
   );
 }

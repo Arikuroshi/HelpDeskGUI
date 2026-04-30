@@ -1,9 +1,8 @@
 import Link from "next/link";
-import Badge from "./ui/badge";
+import Badge from "./ui/Badge";
 import {
   priorityBadgeClass,
   statusBadgeClass,
-  PRIORITY_LABEL,
   STATUS_LABEL,
 } from "../lib/ticketHelpers";
 import type { Priority, Status } from "../../types";
