@@ -2,10 +2,12 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useApp } from "../context/AppContext";
 import Card from "./ui/Card";
 
 export default function NewTicketForm() {
   const router = useRouter();
+  const { role } = useApp();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -18,8 +20,9 @@ export default function NewTicketForm() {
     const body = {
       title: fd.get("title"),
       description: fd.get("description"),
-      impact: fd.get("impact"),
-      urgency: fd.get("urgency"),
+      // Users always get LOW — supporters can set explicitly
+      impact: role === "supporter" ? fd.get("impact") : "LOW",
+      urgency: role === "supporter" ? fd.get("urgency") : "LOW",
     };
 
     const res = await fetch("/api/tickets", {
@@ -61,26 +64,27 @@ export default function NewTicketForm() {
           />
         </Field>
 
-        <div className="grid grid-cols-2 gap-4">
-          <Field label="Impact" name="impact">
-            <select name="impact" defaultValue="LOW" className="input">
-              <option value="LOW">Low</option>
-              <option value="MEDIUM">Medium</option>
-              <option value="HIGH">High</option>
-            </select>
-          </Field>
-
-          <Field label="Urgency" name="urgency">
-            <select name="urgency" defaultValue="LOW" className="input">
-              <option value="LOW">Low</option>
-              <option value="MEDIUM">Medium</option>
-              <option value="HIGH">High</option>
-            </select>
-          </Field>
-        </div>
+        {role === "supporter" && (
+          <div className="grid grid-cols-2 gap-4">
+            <Field label="Impact" name="impact">
+              <select name="impact" defaultValue="LOW" className="input">
+                <option value="LOW">Low</option>
+                <option value="MEDIUM">Medium</option>
+                <option value="HIGH">High</option>
+              </select>
+            </Field>
+            <Field label="Urgency" name="urgency">
+              <select name="urgency" defaultValue="LOW" className="input">
+                <option value="LOW">Low</option>
+                <option value="MEDIUM">Medium</option>
+                <option value="HIGH">High</option>
+              </select>
+            </Field>
+          </div>
+        )}
 
         {error && (
-          <p className="text-sm text-[var(--p1)] bg-[var(--p1)]/10 rounded-xl px-4 py-2">
+          <p className="text-sm text-(--p1) bg-(--p1)/10 rounded-xl px-4 py-2">
             {error}
           </p>
         )}
@@ -88,7 +92,7 @@ export default function NewTicketForm() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full py-2.5 rounded-xl bg-[var(--ink)] text-[var(--surface)] text-sm font-medium hover:opacity-80 transition-opacity disabled:opacity-50"
+          className="w-full py-2.5 rounded-xl bg-ink text-surface text-sm font-medium hover:opacity-80 transition-opacity disabled:opacity-50"
         >
           {loading ? "Submitting…" : "Submit ticket"}
         </button>
@@ -112,10 +116,10 @@ function Field({
     <div className="space-y-1.5">
       <label
         htmlFor={name}
-        className="text-xs font-mono text-[var(--ink-faint)] uppercase tracking-widest"
+        className="text-xs font-mono text-ink-faint uppercase tracking-widest"
       >
         {label}
-        {required && <span className="text-[var(--accent)] ml-0.5">*</span>}
+        {required && <span className="text-accent ml-0.5">*</span>}
       </label>
       {children}
     </div>

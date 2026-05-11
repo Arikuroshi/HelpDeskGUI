@@ -7,59 +7,44 @@ export default function Header() {
   const { role, setRole, theme, toggleTheme } = useApp();
 
   return (
-    <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--surface)] backdrop-blur">
+    <header className="sticky top-0 z-50 border-b border-border bg-surface backdrop-blur">
       <div className="mx-auto max-w-6xl px-4 h-14 flex items-center justify-between gap-4">
-        {/* Logo */}
         <Link
           href="/"
-          className="font-semibold text-[var(--ink)] tracking-tight flex items-center gap-2"
+          className="font-semibold text-ink tracking-tight flex items-center gap-2"
         >
-          <span className="text-[var(--accent)] font-mono text-lg leading-none">
-            ⬡
-          </span>
+          <span className="text-accent font-mono text-lg leading-none">⬡</span>
           Kantan Help
         </Link>
 
-        {/* Nav */}
-        <nav className="hidden sm:flex items-center gap-5 text-sm text-[var(--ink-muted)]">
-          <Link
-            href="/dashboard"
-            className="hover:text-[var(--ink)] transition-colors"
-          >
-            Dashboard
-          </Link>
-          <Link
-            href="/tickets"
-            className="hover:text-[var(--ink)] transition-colors"
-          >
-            Tickets
-          </Link>
+        <nav className="hidden sm:flex items-center gap-5 text-sm text-ink-muted">
           {role === "supporter" && (
             <Link
-              href="/tickets/new"
-              className="hover:text-[var(--ink)] transition-colors"
+              href="/dashboard"
+              className="hover:text-ink transition-colors"
             >
-              New ticket
+              Dashboard
             </Link>
           )}
+          <Link href="/tickets" className="hover:text-ink transition-colors">
+            Tickets
+          </Link>
           <Link
             href="/help-center"
-            className="hover:text-[var(--ink)] transition-colors"
+            className="hover:text-ink transition-colors"
           >
             Help centre
           </Link>
         </nav>
 
-        {/* Controls */}
         <div className="flex items-center gap-2">
-          {/* Role toggle */}
-          <div className="flex items-center rounded-lg border border-[var(--border)] overflow-hidden text-xs font-mono">
+          <div className="flex items-center rounded-lg border border-border overflow-hidden text-xs font-mono">
             <button
               onClick={() => setRole("user")}
               className={`px-3 py-1.5 transition-colors ${
                 role === "user"
-                  ? "bg-[var(--ink)] text-[var(--surface)]"
-                  : "text-[var(--ink-muted)] hover:text-[var(--ink)]"
+                  ? "bg-ink text-surface"
+                  : "text-ink-muted hover:text-ink"
               }`}
             >
               User
@@ -68,19 +53,18 @@ export default function Header() {
               onClick={() => setRole("supporter")}
               className={`px-3 py-1.5 transition-colors ${
                 role === "supporter"
-                  ? "bg-[var(--accent)] text-white"
-                  : "text-[var(--ink-muted)] hover:text-[var(--ink)]"
+                  ? "bg-accent text-white"
+                  : "text-ink-muted hover:text-ink"
               }`}
             >
               Supporter
             </button>
           </div>
 
-          {/* Theme toggle */}
           <button
             onClick={toggleTheme}
             aria-label="Toggle theme"
-            className="w-8 h-8 rounded-lg border border-[var(--border)] flex items-center justify-center text-[var(--ink-muted)] hover:text-[var(--ink)] hover:bg-[var(--surface-2)] transition-colors"
+            className="w-8 h-8 rounded-lg border border-border flex items-center justify-center text-ink-muted hover:text-ink hover:bg-surface-2 transition-colors"
           >
             {theme === "light" ? (
               <svg width="15" height="15" viewBox="0 0 15 15" fill="none">

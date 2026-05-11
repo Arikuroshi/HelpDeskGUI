@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { DM_Sans, DM_Mono } from "next/font/google";
 import "./globals.css";
 import { AppProvider } from "./context/AppContext";
+import { ToastProvider } from "./context/ToastContext";
 import Header from "./components/layout/Header";
 
 const dmSans = DM_Sans({
@@ -35,6 +36,28 @@ export default function RootLayout({
           <footer className="border-t border-ink/10 py-4 text-center text-xs text-ink/40 font-mono">
             © {new Date().getFullYear()} Kantan Help
           </footer>
+        </AppProvider>
+      </body>
+    </html>
+  );
+}
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en" className={`${dmSans.variable} ${dmMono.variable}`}>
+      <body className="min-h-screen flex flex-col bg-surface text-ink antialiased">
+        <AppProvider>
+          <ToastProvider>
+            <Header />
+            <main className="flex-1">{children}</main>
+            <footer className="border-t border-ink/10 py-4 text-center text-xs text-ink/40 font-mono">
+              © {new Date().getFullYear()} Kantan Help
+            </footer>
+          </ToastProvider>
         </AppProvider>
       </body>
     </html>

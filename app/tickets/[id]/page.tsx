@@ -10,7 +10,9 @@ import {
   PRIORITY_LABEL,
   PRIORITY_SLA,
 } from "../../lib/ticketHelpers";
+import TicketMeta from "../../components/TicketMeta";
 import TicketActions from "../../components/TicketActions";
+import CommentForm from "../../components/CommentForm";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -76,9 +78,9 @@ export default async function TicketPage({ params }: Props) {
               Comments ({ticket.comments.length})
             </p>
             {ticket.comments.length === 0 ? (
-              <p className="text-sm text-ink-faint">No comments yet.</p>
+              <p className="text-sm text-ink-faint mb-3">No comments yet.</p>
             ) : (
-              <div className="space-y-3">
+              <div className="space-y-3 mb-3">
                 {ticket.comments.map((c) => (
                   <Card key={c.id} className="p-4">
                     <div className="flex items-center gap-2 mb-2">
@@ -94,6 +96,7 @@ export default async function TicketPage({ params }: Props) {
                 ))}
               </div>
             )}
+            <CommentForm ticketId={ticket.id} />
           </div>
         </div>
 
@@ -131,8 +134,23 @@ export default async function TicketPage({ params }: Props) {
               </div>
             </div>
           </Card>
-
-          <TicketActions ticketId={ticket.id} currentStatus={ticket.status} />
+          <TicketMeta
+            ticketId={ticket.id}
+            currentImpact={ticket.impact}
+            currentUrgency={ticket.urgency}
+          />
+          <TicketActions
+            ticketId={ticket.id}
+            currentStatus={ticket.status}
+            assignedToId={ticket.assignedToId}
+            assignedToName={ticket.assignedTo?.name ?? null}
+          />
+          <TicketActions
+            ticketId={ticket.id}
+            currentStatus={ticket.status}
+            assignedToId={ticket.assignedToId}
+            assignedToName={ticket.assignedTo?.name ?? null}
+          />
         </div>
       </div>
     </div>
