@@ -67,7 +67,7 @@ function ToastItem({
 
   return (
     <div
-      className={`pointer-events-auto flex items-center justify-between gap-4 px-4 py-3 rounded-xl shadow-lg text-sm font-medium min-w-[260px] max-w-sm animate-in slide-in-from-bottom-2 ${styles[toast.type]}`}
+      className={`pointer-events-auto flex items-center justify-between gap-4 px-4 py-3 rounded-xl shadow-lg text-sm font-medium min-w-65 max-w-sm animate-in slide-in-from-bottom-2 ${styles[toast.type]}`}
     >
       <span>{toast.message}</span>
       <button
