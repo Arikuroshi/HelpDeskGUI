@@ -78,9 +78,9 @@ export default function TicketActions({
   }
 
   const transitions: { label: string; status: Status }[] = [
-    { label: "Mark open", status: "OPEN" },
-    { label: "Start progress", status: "IN_PROGRESS" },
-    { label: "Close ticket", status: "CLOSED" },
+    { label: "Mark open", status: "OPEN" as Status },
+    { label: "Start progress", status: "IN_PROGRESS" as Status },
+    { label: "Close ticket", status: "CLOSED" as Status },
   ].filter((t) => t.status !== currentStatus);
 
   const isClaimed = assignedToId !== null;

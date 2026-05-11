@@ -145,12 +145,6 @@ export default async function TicketPage({ params }: Props) {
             assignedToId={ticket.assignedToId}
             assignedToName={ticket.assignedTo?.name ?? null}
           />
-          <TicketActions
-            ticketId={ticket.id}
-            currentStatus={ticket.status}
-            assignedToId={ticket.assignedToId}
-            assignedToName={ticket.assignedTo?.name ?? null}
-          />
         </div>
       </div>
     </div>
